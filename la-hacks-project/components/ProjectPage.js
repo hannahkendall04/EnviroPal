@@ -1,14 +1,104 @@
-import {View, Text, StyleSheet, Pressable, Modal, Image} from 'react-native';
-import React, {useState} from 'react';
+import {View, Text, StyleSheet, Pressable, Modal, Image, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+
+const {GoogleGenerativeAI} = require('@google/generative-ai');
+const API_KEY = 'AIzaSyCHKmY0gedI_RMoL4Si90iPosuDWc4BuXU';
+const genAI = new GoogleGenerativeAI(API_KEY);
+
+async function getProjectLongDescription({title, description}) {
+    const model = genAI.getGenerativeModel({model: "gemini-pro"});
+  
+    const prompt = `Give me a longer description for an individual project that anyone can do to better the environment called ${title}. The short description is: ${description}. DO NOT INCLUDE BACK TICKS IN YOUR RESPONSE`;
+
+    try {
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    console.log(response.text());
+    return response.text();
+
+}
+    catch (e) {
+    console.log("Error: ", e);
+    }
+
+}
+async function getProjectTasks({title, longDescription}) {
+    const model = genAI.getGenerativeModel({model: "gemini-pro"});
+  
+    const prompt = `Give me no more than 7 project SPECIFIC tasks for an individual project that anyone can do to better the environment called ${title}. The long description is: ${longDescription}. DO NOT INCLUDE BACK TICKS IN YOUR RESPONSE`;
+
+    try {
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    console.log(response.text());
+    return response.text();
+
+}
+    catch (e) {
+    console.log("Error: ", e);
+    }
+}
+
+async function createProject({title, description}) {
+    try{
+        const longDescription = await getProjectLongDescription({title, description});
+        const tasks =  await getProjectTasks({title, longDescription});
+        return {longDescription, tasks};
+    }
+    catch (e) {
+        console.log("Error: ", e);
+    }
+}
 
 export default function ProjectPage({route, navigation}) {
-    const {title, description, tasks, pageName} = route.params;
-    const name = pageName === 'goGreen' ? 'Go Green' : 'Touch Grass';
-    
+    const {title, description, pageName} = route.params;
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [project, setProject] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
+    const [task, setTask] = useState(null);
 
+    useEffect(() => {
+        const fetchProject = async () => {
+        const project = await createProject({title, description});
+        if (project) {
+            setProject(project);
+            setLoading(false);
+        }
+        else {
+            setError(true);
+        }
+    };
+        fetchProject();
+    }, []);
+
+    useEffect(() => {
+        const changeTask = () =>{
+        console.log("Task completed: ", task);
+        };
+        changeTask();
+    }, [tasks])
+
+    const tasks = project ? project.tasks.split('\n') : [];
+
+    const name = pageName === 'goGreen' ? 'Go Green' : 'Touch Grass';
     const styles = pageName === 'goGreen' ? goGreen : touchGrass;
-
+    
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <Text style={styles.loadingText}>Loading...</Text>
+            </View>
+        )
+    }
+    else if (error) {
+        return (
+            <View style={styles.container}>
+                <Text>Error: Unable to load projects</Text>
+            </View>
+        )
+    }
+    else {
     return (
         <View style={styles.container}>
             <Modal visible={modalVisible} animationType='slide'>
@@ -16,7 +106,14 @@ export default function ProjectPage({route, navigation}) {
                 <View>
                     <Image source={require('../assets/task_plant.jpg')} style={styles.image} />
                 </View>
-                <Pressable onPress={() => setModalVisible(false)}>
+                <Pressable onPress={() => {
+                    setModalVisible(false);
+                    for (let i = 0; i < tasks.length; i++) {
+                        if (tasks[i] === task) {
+                            tasks.splice(i, 1);
+                            break;
+                    }
+                }}}>
                     <View style={styles.modalButton}>
                         <Text style={styles.subtitle}>Continue to Next Task</Text>
                     </View>
@@ -28,19 +125,20 @@ export default function ProjectPage({route, navigation}) {
                     </View>
                 </Pressable>
             </Modal>
-            <Text style={styles.title}>Project: {title} </Text>
+            <Text style={styles.title}>{title} </Text>
             <Text style={styles.subtitle}>{description} </Text>
-            <View>
+            <ScrollView>
                 {tasks.map((task) => {
                     return (
-                        <Pressable onPress={() => setModalVisible(true)} key={task.id} style={styles.taskContainer}>
+                        <Pressable onPress={() => {setModalVisible(true); setTask(task)}} key={task.id} style={styles.taskContainer}>
                             <Text style={styles.task}>{task}</Text>
                         </Pressable>
                     )
                 })}
-            </View>
+            </ScrollView>
         </View>
     )
+}
 }
 
 const goGreen = StyleSheet.create({
@@ -50,17 +148,28 @@ const goGreen = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'top',
     },
-    title: {
+    loadingContainer:{
+        flex: 1,
+        backgroundColor: '#ecfaeb'
+    },
+    loadingText: {
         fontWeight: 'bold',
         fontSize: 20,
         color: '#679436',
         paddingBottom: 20,
         paddingTop: 50,
+        paddingLeft: 20,
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: '#679436',
+        paddingTop: 50,
     },
     subtitle: {
         fontSize: 16,
         color: '#679436',
-        paddingBottom: 20,
+        padding: 20,
     },
     taskContainer: {
         backgroundColor: '#ecfaeb',
@@ -74,7 +183,6 @@ const goGreen = StyleSheet.create({
     modalButton: {
         backgroundColor: '#ecfaeb',
         borderRadius: 10,
-        paddingTop:15,
         borderWidth: 2,
         marginTop: 50,
         marginLeft:50,
@@ -105,6 +213,7 @@ const goGreen = StyleSheet.create({
         fontWeight: 'bold',
         color: '#679436',
         padding: 10,
+        marginLeft: 40,
     },
     image: {
         marginLeft: 20,
@@ -123,6 +232,18 @@ const touchGrass = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'top',
     },
+    loadingContainer:{
+        flex: 1,
+        backgroundColor: '#ebf2fa',
+    },
+    loadingText: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: '#427aa1',
+        paddingBottom: 20,
+        paddingTop: 50,
+        marginLeft: 20,
+    },
     title: {
         fontWeight: 'bold',
         fontSize: 20,
@@ -133,7 +254,7 @@ const touchGrass = StyleSheet.create({
     subtitle: {
         fontSize: 16,
         color: '#427aa1',
-        paddingBottom: 20,
+        padding: 20,
     },
     taskContainer: {
         backgroundColor: '#ebf2fa',
@@ -147,7 +268,6 @@ const touchGrass = StyleSheet.create({
     modalButton: {
         backgroundColor: '#ebf2fa',
         borderRadius: 10,
-        paddingTop:15,
         borderWidth: 2,
         marginTop: 50,
         marginLeft:50,
@@ -178,6 +298,7 @@ const touchGrass = StyleSheet.create({
         fontWeight: 'bold',
         color: '#427aa1',
         padding: 10,
+        marginLeft: 40,
     },
     image: {
         marginLeft: 20,
