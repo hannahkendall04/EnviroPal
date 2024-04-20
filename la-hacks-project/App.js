@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { NavigationContainer, NavigationRouteContext, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -24,6 +24,16 @@ export default function App() {
         return '#679436';
     }
   }
+
+  const setBackColor = (pageName) => {
+    switch (pageName) {
+      case 'touchGrass':
+        return '#427aa1';
+      case 'goGreen':
+        return '#679436';
+    }
+  } 
+  
   const GoGreenTab = () => {
     return (
       <Tab.Navigator screenOptions={{headerShown: false, 
@@ -52,7 +62,10 @@ export default function App() {
               headerStyle: {
                 backgroundColor: getBackgroundColor(route),
               }, headerTintColor: '#fff'})} />
-          <Stack.Screen name="Project Page" component={ProjectPage} />
+          <Stack.Screen name="Project Page" component={ProjectPage} options={({route}) => ({
+              headerStyle: {
+                backgroundColor: setBackColor(route.params.pageName),
+              }, headerTintColor: '#fff'})}/>
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />

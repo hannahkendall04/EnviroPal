@@ -52,6 +52,7 @@ async function createProject({title, description}) {
 
 export default function ProjectPage({route, navigation}) {
     const {title, description, pageName} = route.params;
+
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
     const [project, setProject] = useState(null);
@@ -81,7 +82,6 @@ export default function ProjectPage({route, navigation}) {
 
     const tasks = project ? project.tasks.split('\n') : [];
 
-    const name = pageName === 'goGreen' ? 'Go Green' : 'Touch Grass';
     const styles = pageName === 'goGreen' ? goGreen : touchGrass;
     
     if (loading) {
@@ -164,7 +164,8 @@ const goGreen = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         color: '#679436',
-        paddingTop: 50,
+        paddingTop: 30,
+
     },
     subtitle: {
         fontSize: 16,
@@ -247,9 +248,9 @@ const touchGrass = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 20,
+        align: 'center',
         color: '#427aa1',
-        paddingBottom: 20,
-        paddingTop: 50,
+        paddingTop: 30,
     },
     subtitle: {
         fontSize: 16,
