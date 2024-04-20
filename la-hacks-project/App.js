@@ -4,18 +4,31 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import HomePage from './components/HomePage.js';
+import ProjectHome from './components/ProjectHome.js';
 import ProjectPage from './components/ProjectPage.js';
-import ImageViewer from './components/ImageViewer.js';
-
 const Stack = createStackNavigator();
 
-export default function App() {
+export default function App({project}) {
   return (
     <View style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomePage} />
-          <Stack.Screen name="Project" component={ProjectPage} />
+          <Stack.Screen name=" " component={HomePage} 
+            options={{
+              headerStyle: {
+              backgroundColor: '#679436',
+            }, 
+              headerTintColor: '#fff' }} />
+          <Stack.Screen name="Project Home" component={ProjectHome}
+            options={{
+              headerStyle: {
+                backgroundColor: '#427aa1',
+              }, headerTintColor: '#fff'}} />
+          <Stack.Screen name="Project Page" component={ProjectPage} 
+            options={{
+              headerStyle: {
+                backgroundColor: '#427aa1',
+              }, headerTintColor: '#fff'}}/>
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />

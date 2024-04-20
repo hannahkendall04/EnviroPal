@@ -1,31 +1,90 @@
-import {StyleSheet, Text, View, Button} from 'react-native';
+import {View, Text, StyleSheet, Pressable, Modal, Image} from 'react-native';
+import React, {useState} from 'react';
 
-export default function ProjectPage() {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>BeGreen</Text>
-            <Text style={styles.subtitle}>Your one stop shop for all things green!</Text>
-            <Button title="Get Started" onPress={() => alert('You pressed a button.')}/>
-        </View>
-    );
+export default function ProjectPage({route, navigation}) {
+    const {title, description, tasks} = route.params;
+    const [modalVisible, setModalVisible] = useState(false);
+
+        return (
+            <View style={styles.container}>
+                <Modal visible={modalVisible} animationType='slide'>
+                    <Text style={styles.alert}>Congrats on finishing your task!</Text>
+                    <View>
+                    <Image source={require('../assets/task_plant.jpg')} style={styles.image} />
+                    </View>
+                    <Pressable onPress={() => setModalVisible(false)}>
+                        <View style={styles.modalButton}>
+                            <Text style={styles.subtitle}>Continue to Next Task</Text>
+                        </View>
+                    </Pressable>
+                </Modal>
+                <Text style={styles.title}>Project: {title} </Text>
+                <Text style={styles.subtitle}>{description} </Text>
+                <View>
+                    {tasks.map((task) => {
+                        return(
+                            <Pressable onPress={() => setModalVisible(true)} key={task.id} style={styles.taskContainer}>
+                                <Text style={styles.task}>{task}</Text>
+                            </Pressable>
+                        )
+                    })}
+                </View>
+            </View>
+        )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#427aa1',
+        backgroundColor: '#ebf2fa',
         alignItems: 'center',
         justifyContent: 'top',
     },
     title: {
         fontWeight: 'bold',
         fontSize: 20,
-        color: '#ebf2fa',
+        color: '#427aa1',
         paddingBottom: 20,
         paddingTop: 50,
     },
     subtitle: {
         fontSize: 16,
-        color: '#ebf2fa',
+        color: '#427aa1',
+        paddingBottom: 20,
+    },
+    taskContainer: {
+        backgroundColor: '#ebf2fa',
+        width: 300,
+        padding: 10,
+        margin: 5,
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: '#427aa1',
+    },
+    modalButton: {
+        backgroundColor: '#ebf2fa',
+        borderRadius: 10,
+        paddingTop:15,
+        borderWidth: 2,
+        marginTop: 50,
+        marginLeft:50,
+        marginRight:50,
+        borderColor: '#427aa1',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    alert: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#427aa1',
+        padding: 10,
+    },
+    image: {
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 30,
+        width: 350,
+        height: 350,
+        borderRadius: 10,
     },
 });
