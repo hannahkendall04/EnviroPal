@@ -1,7 +1,8 @@
 import {StyleSheet, Text, View, Pressable} from 'react-native';
 import Project from './Project.js';
 
-export default function ProjectHome({navigation}) {
+export default function GoGreen({navigation}) {
+
     const description = "Select a project to get started!";
     const projects = [
         {
@@ -22,7 +23,7 @@ export default function ProjectHome({navigation}) {
       ]
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>BeGreen</Text>
+            <Text style={styles.title}>Go Green</Text>
             <Text style={styles.subtitle}>{description}</Text>
             <View>
                 {projects.map((project) => {
@@ -31,7 +32,8 @@ export default function ProjectHome({navigation}) {
                             onPress ={() => navigation.navigate("Project Page", 
                                 {title: project.title, 
                                 description: project.description,
-                                tasks: project.tasks})}>
+                                tasks: project.tasks,
+                                pageName: "goGreen"})}>
                             <Project title={project.title} description={project.description} />
                         </Pressable>
                     );
@@ -44,25 +46,25 @@ export default function ProjectHome({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ebf2fa',
+        backgroundColor: '#ecfaeb',
         alignItems: 'center',
         justifyContent: 'top',
     },
     title: {
         fontWeight: 'bold',
         fontSize: 20,
-        color: '#427aa1',
+        color: '#679436',
         paddingBottom: 20,
         paddingTop: 50,
     },
     subtitle: {
         fontSize: 16,
-        color: '#427aa1',
+        color: '#679436',
         paddingBottom: 20,
     },
     projectContainer:{
         width: 350,
-        backgroundColor: '#427aa1',
+        backgroundColor: '#679436',
         padding: 10,
         borderRadius: 10,
         margin: 10,

@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 export default function Project({title, description, id, navigation}) {
 
     return (
-        <View style={styles.container}>
+        <View>
             <Text style={styles.title}>Project Name: {title}</Text>
             <Text style={styles.subtitle}>Description: {description} </Text>
         </View>
@@ -11,9 +11,6 @@ export default function Project({title, description, id, navigation}) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#427aa1'
-    },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
