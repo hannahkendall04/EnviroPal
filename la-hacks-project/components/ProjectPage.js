@@ -21,6 +21,12 @@ export default function ProjectPage({route, navigation}) {
                         <Text style={styles.subtitle}>Continue to Next Task</Text>
                     </View>
                 </Pressable>
+                <Pressable onPress={() => setModalVisible(false)}>
+                    <View style={styles.modalButtonRed}>
+                        <Text style={styles.subtitleRed}>Not done yet?</Text> 
+                        <Text style={styles.subtitleRed}> Continue Working!</Text>
+                    </View>
+                </Pressable>
             </Modal>
             <Text style={styles.title}>Project: {title} </Text>
             <Text style={styles.subtitle}>{description} </Text>
@@ -77,6 +83,23 @@ const goGreen = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    modalButtonRed: {
+        backgroundColor: '#faebeb',
+        borderRadius: 10,
+        paddingTop:7,
+        borderWidth: 2,
+        marginTop: 30,
+        marginLeft:75,
+        marginRight:75,
+        borderColor: '#a14242',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    subtitleRed: {
+        fontSize: 16,
+        color: '#a14242',
+        paddingBottom: 5,
+    },
     alert: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -132,6 +155,23 @@ const touchGrass = StyleSheet.create({
         borderColor: '#427aa1',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    modalButtonRed: {
+        backgroundColor: '#faebeb',
+        borderRadius: 10,
+        paddingTop:7,
+        borderWidth: 2,
+        marginTop: 30,
+        marginLeft:75,
+        marginRight:75,
+        borderColor: '#a14242',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    subtitleRed: {
+        fontSize: 16,
+        color: '#a14242',
+        paddingBottom: 5,
     },
     alert: {
         fontSize: 20,

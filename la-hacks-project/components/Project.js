@@ -4,8 +4,8 @@ export default function Project({title, description, id, navigation}) {
 
     return (
         <View>
-            <Text style={styles.title}>Project Name: {title}</Text>
-            <Text style={styles.subtitle}>Description: {description} </Text>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.subtitle}>{description} </Text>
         </View>
     )
 }
