@@ -26,7 +26,7 @@ async function getProjectLongDescription({title, description}) {
 async function getProjectTasks({title, longDescription}) {
     const model = genAI.getGenerativeModel({model: "gemini-pro"});
   
-    const prompt = `Give me no more than 10 project SPECIFIC tasks for an individual project that anyone can do to better the environment called ${title}. The long description is: ${longDescription}. DO NOT INCLUDE BACK TICKS IN YOUR RESPONSE. DO NOT INCLUDE ASTERISKS IN YOUR RESPONSE`;
+    const prompt = `Give me no more than 8 project SPECIFIC tasks for an individual project that anyone can do to better the environment called ${title}. The tasks should be "bite size" and goal-oriented. The long description is: ${longDescription}. DO NOT INCLUDE BACK TICKS IN YOUR RESPONSE. DO NOT INCLUDE ASTERISKS IN YOUR RESPONSE`;
 
     try {
     const result = await model.generateContent(prompt);
@@ -59,6 +59,7 @@ export default function ProjectPage({route, navigation}) {
     const [project, setProject] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [task, setTask] = useState('');
+    const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -66,6 +67,7 @@ export default function ProjectPage({route, navigation}) {
         if (project) {
             setProject(project);
             setLoading(false);
+            setTasks(project.tasks.split('\n'));
         }
         else {
             setError(true);
@@ -74,15 +76,13 @@ export default function ProjectPage({route, navigation}) {
         fetchProject();
     }, []);
 
-    const tasks = project ? project.tasks.split('\n') : [];
-
     const styles = pageName === 'goGreen' ? goGreen : touchGrass;
     
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
                 <Text style={styles.loadingText}>Loading...</Text>
-                <Text style={styles.loadingSubText}>steps to make {title} the best it can be!</Text>
+                <Text style={styles.loadingSubText}>Steps to make your project: <Text style={{fontWeight: 'bold'}}>{title}</Text>, the best it can be!</Text>
             </View>
         )
     }
@@ -105,6 +105,7 @@ export default function ProjectPage({route, navigation}) {
                     setModalVisible(false);
                     const updatedTasks = tasks.filter(t => t !== task);
                     setProject({...project, tasks: updatedTasks.join('\n')});
+                    setTasks(updatedTasks);
                     }}>
                     <View style={styles.modalButton}>
                         <Text style={styles.subtitle}>Continue to Next Task</Text>
@@ -120,25 +121,27 @@ export default function ProjectPage({route, navigation}) {
             <Text style={styles.title}>{title} </Text>
             <Text style={styles.subtitle}>{description} </Text>
             <ScrollView>
+                { tasks.length > 0 ?
+                <View>
                 {tasks.map((task) => {
-                    if (tasks.length > 1){
                     return (
                         <Pressable onPress={() => {setModalVisible(true); setTask(task)}} key={task.id} style={styles.taskContainer}>
                             <Text style={styles.task}>{task}</Text>
                         </Pressable>
-                    )
-                    }
-                    else {
-                        return (
-                            <Text style={styles.title}>Project Completed!!</Text>
-                        )
-                    
-                    }})}
+                    )})}
+                    </View>
+                :  <View>
+                        <Image source={require('../assets/task_plant.jpg')} style={styles.image} />
+                        <Text style={styles.finalTitle}>Congratulations! </Text>
+                        <Text style={styles.finalSubtitle}>You have completed the project: <Text style={{fontWeight: 'bold'}}>{title}</Text> </Text>
+                    </View>
+    }
             </ScrollView>
         </View>
     )
 }
 }
+
 
 const goGreen = StyleSheet.create({
     container: {
@@ -150,6 +153,21 @@ const goGreen = StyleSheet.create({
     loadingContainer:{
         flex: 1,
         backgroundColor: '#ecfaeb'
+    },
+    finalTitle: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: '#679436',
+        marginLeft: 100,
+        marginRight: 100,
+        marginTop: 20,
+        marginBottom: 5,
+    },
+    finalSubtitle: {
+        fontSize: 16,
+        color: '#679436',
+        marginLeft: 50,
+        marginRight: 50,
     },
     loadingText: {
         fontWeight: 'bold',
@@ -180,6 +198,10 @@ const goGreen = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 2,
         borderColor: '#679436',
+    },
+    task: {
+        fontSize: 14,
+        color: '#679436',
     },
     modalButton: {
         backgroundColor: '#ecfaeb',
@@ -214,12 +236,13 @@ const goGreen = StyleSheet.create({
         fontWeight: 'bold',
         color: '#679436',
         padding: 10,
+        paddingTop: 30,
         marginLeft: 40,
     },
     image: {
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 30,
+        marginTop: 10,
         width: 350,
         height: 350,
         borderRadius: 10,
@@ -263,6 +286,21 @@ const touchGrass = StyleSheet.create({
         color: '#427aa1',
         padding: 20,
     },
+    finalTitle: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: '#427aa1',
+        marginLeft: 100,
+        marginRight: 100,
+        marginTop: 20,
+        marginBottom: 5,
+    },
+    finalSubtitle: {
+        fontSize: 16,
+        color: '#427aa1',
+        marginLeft: 50,
+        marginRight: 50,
+    },
     taskContainer: {
         backgroundColor: '#ebf2fa',
         width: 300,
@@ -271,6 +309,10 @@ const touchGrass = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 2,
         borderColor: '#427aa1',
+    },
+    task: {
+        fontSize: 14,
+        color: '#427aa1',
     },
     modalButton: {
         backgroundColor: '#ebf2fa',
@@ -310,7 +352,7 @@ const touchGrass = StyleSheet.create({
     image: {
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 30,
+        marginTop: 20,
         width: 350,
         height: 350,
         borderRadius: 10,

@@ -7,7 +7,7 @@ export default function HomePage({navigation}) {
   return(
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={{fontWeight: 'bold', fontSize: 20}}>EnviroPal</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 20, color: '#fff'}}>EnviroPal</Text>
       </View>
       <ImageViewer source={require('../assets/home_icon.png')} />
       <View style={styles.buttonContainer}>
@@ -23,12 +23,12 @@ export default function HomePage({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#679436',
+    backgroundColor: '#dae8d8',
     alignItems: 'center',
     justifyContent: 'top',
   },
   title: {
-      backgroundColor: '#ebf2fa', 
+      backgroundColor: '#679436', 
       padding: 10, 
       width: 300, 
       borderRadius: 10, 
@@ -53,13 +53,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    backgroundColor: '#ebf2fa',
+    backgroundColor: '#679436',
   },
   buttonIcon: {
     paddingRight: 8,
   },
   buttonLabel: {
-    color: '#000',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   }

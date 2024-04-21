@@ -82,7 +82,7 @@ export default function GoGreen({navigation}) {
         return (
             <View style={styles.loadingContainer}>
                 <Text style={styles.title}>Loading...</Text>
-                <Text style={styles.subtitle}>projects to help you Go Green and give back to the wonderful world around you!</Text>
+                <Text style={styles.subtitle}>Projects to help you <Text style={{fontWeight: 'bold'}}>Go Green</Text> and give back to the wonderful world around you!</Text>
             </View>
         )
     }
@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
     loadingContainer:{
         flex: 1,
         backgroundColor: '#ecfaeb',
-        marginLeft:50,
-        marginRight:50,
+        paddingLeft:50,
+        paddingRight:50,
     },
     resetProjects: {
         marginBottom: 10,

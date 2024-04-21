@@ -83,7 +83,7 @@ export default function TouchGrass({navigation}) {
             return (
                 <View style={styles.loadingContainer}>
                     <Text style={styles.title}>Loading...</Text>
-                    <Text style={styles.subtitle}>self care projects to help you Touch Grass and reconnect with nature!</Text>
+                    <Text style={styles.subtitle}>Self care projects to help you <Text style={{fontWeight: 'bold'}}>Touch Grass</Text> and reconnect with nature!</Text>
                 </View>
             )
     }
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
     loadingContainer:{
         flex: 1,
         backgroundColor: '#ebf2fa',
-        marginLeft:50,
-        marginRight:50,
+        paddingLeft:50,
+        paddingRight:50,
     },
     resetProjects: {
         marginBottom: 10,
