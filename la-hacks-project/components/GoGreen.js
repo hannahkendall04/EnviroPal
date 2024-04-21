@@ -105,7 +105,7 @@ export default function GoGreen({navigation}) {
                             onPress ={() => navigation.navigate("Project Page", 
                                 {title: project.title, 
                                 description: project.description,
-                                pageName: "touchGrass"})}>
+                                pageName: "goGreen"})}>
                             <Project title={project.title} description={project.description} />
                         </Pressable>
                 );})}

@@ -164,7 +164,8 @@ const goGreen = StyleSheet.create({
         fontSize: 20,
         color: '#679436',
         paddingTop: 30,
-
+        marginLeft: 20,
+        marginRight: 20,
     },
     subtitle: {
         fontSize: 16,
@@ -252,9 +253,10 @@ const touchGrass = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 20,
-        align: 'center',
         color: '#427aa1',
         paddingTop: 30,
+        marginLeft: 20,
+        marginRight: 20,
     },
     subtitle: {
         fontSize: 16,
