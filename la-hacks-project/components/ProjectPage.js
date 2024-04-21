@@ -2,7 +2,8 @@ import {View, Text, StyleSheet, Pressable, Modal, Image, ScrollView} from 'react
 import React, {useState, useEffect} from 'react';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
-const API_KEY = 'AIzaSyCHKmY0gedI_RMoL4Si90iPosuDWc4BuXU';
+// const API_KEY = 'AIzaSyCHKmY0gedI_RMoL4Si90iPosuDWc4BuXU';
+const API_KEY = 'AIzaSyDrl-C4F0U_goNGQY9wPQObXKFLyPkUd70';
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 async function getProjectLongDescription({title, description}) {
@@ -25,7 +26,7 @@ async function getProjectLongDescription({title, description}) {
 async function getProjectTasks({title, longDescription}) {
     const model = genAI.getGenerativeModel({model: "gemini-pro"});
   
-    const prompt = `Give me no more than 7 project SPECIFIC tasks for an individual project that anyone can do to better the environment called ${title}. The long description is: ${longDescription}. DO NOT INCLUDE BACK TICKS IN YOUR RESPONSE`;
+    const prompt = `Give me no more than 10 project SPECIFIC tasks for an individual project that anyone can do to better the environment called ${title}. The long description is: ${longDescription}. DO NOT INCLUDE BACK TICKS IN YOUR RESPONSE. DO NOT INCLUDE ASTERISKS IN YOUR RESPONSE`;
 
     try {
     const result = await model.generateContent(prompt);
@@ -57,7 +58,7 @@ export default function ProjectPage({route, navigation}) {
     const [loading, setLoading] = useState(true);
     const [project, setProject] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-    const [task, setTask] = useState(null);
+    const [task, setTask] = useState('');
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -73,13 +74,6 @@ export default function ProjectPage({route, navigation}) {
         fetchProject();
     }, []);
 
-    useEffect(() => {
-        const changeTask = () =>{
-        console.log("Task completed: ", task);
-        };
-        changeTask();
-    }, [tasks])
-
     const tasks = project ? project.tasks.split('\n') : [];
 
     const styles = pageName === 'goGreen' ? goGreen : touchGrass;
@@ -88,6 +82,7 @@ export default function ProjectPage({route, navigation}) {
         return (
             <View style={styles.loadingContainer}>
                 <Text style={styles.loadingText}>Loading...</Text>
+                <Text style={styles.loadingSubText}>steps to make {title} the best it can be!</Text>
             </View>
         )
     }
@@ -108,12 +103,9 @@ export default function ProjectPage({route, navigation}) {
                 </View>
                 <Pressable onPress={() => {
                     setModalVisible(false);
-                    for (let i = 0; i < tasks.length; i++) {
-                        if (tasks[i] === task) {
-                            tasks.splice(i, 1);
-                            break;
-                    }
-                }}}>
+                    const updatedTasks = tasks.filter(t => t !== task);
+                    setProject({...project, tasks: updatedTasks.join('\n')});
+                    }}>
                     <View style={styles.modalButton}>
                         <Text style={styles.subtitle}>Continue to Next Task</Text>
                     </View>
@@ -129,12 +121,19 @@ export default function ProjectPage({route, navigation}) {
             <Text style={styles.subtitle}>{description} </Text>
             <ScrollView>
                 {tasks.map((task) => {
+                    if (tasks.length > 1){
                     return (
                         <Pressable onPress={() => {setModalVisible(true); setTask(task)}} key={task.id} style={styles.taskContainer}>
                             <Text style={styles.task}>{task}</Text>
                         </Pressable>
                     )
-                })}
+                    }
+                    else {
+                        return (
+                            <Text style={styles.title}>Project Completed!!</Text>
+                        )
+                    
+                    }})}
             </ScrollView>
         </View>
     )
@@ -224,6 +223,11 @@ const goGreen = StyleSheet.create({
         height: 350,
         borderRadius: 10,
     },
+    loadingSubText: {
+        fontSize: 16,
+        color: '#679436',
+        paddingLeft: 20,
+    },
 });
 
 const touchGrass = StyleSheet.create({
@@ -308,5 +312,10 @@ const touchGrass = StyleSheet.create({
         width: 350,
         height: 350,
         borderRadius: 10,
+    },
+    loadingSubText: {
+        fontSize: 16,
+        color: '#427aa1',
+        paddingLeft: 20,
     },
 });

@@ -1,15 +1,17 @@
-import {StyleSheet, Text, View, Pressable} from 'react-native';
+import {StyleSheet, Text, View, Pressable, ScrollView} from 'react-native';
 import Project from './Project.js';
 import React, {useState, useEffect} from 'react';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
-const API_KEY = 'AIzaSyCHKmY0gedI_RMoL4Si90iPosuDWc4BuXU';
+//const API_KEY = 'AIzaSyCHKmY0gedI_RMoL4Si90iPosuDWc4BuXU';
+const API_KEY = 'AIzaSyDrl-C4F0U_goNGQY9wPQObXKFLyPkUd70';
+
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 async function getProjectTitle() {
     const model = genAI.getGenerativeModel({model: "gemini-pro"});
   
-    const prompt = "Give me a name for an individual project that anyone can do to get outside and enjoy nature. DO NOT INCLUDE BACK TICKS IN YOUR RESPONSE";
+    const prompt = "Give me a name for an individual project that anyone can do to get outside and enjoy nature. Make it unique and creative! DO NOT INCLUDE BACK TICKS IN YOUR RESPONSE";
 
     try {
     const result = await model.generateContent(prompt);
@@ -55,30 +57,35 @@ export default function TouchGrass({navigation}) {
     
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [project, setProject] = useState(null);
+    const [projects, setProjects] = useState([]);
+    const [variable, setVariable] = useState(false);
 
     useEffect(() => {
         const fetchProject = async () => {
-        const project = await createProject();
-        if (project) {
-            setProject(project);
+        const p = await createProject();
+        const p2 = await createProject();
+        const p3 = await createProject();
+        if (p && p2 && p3) {
+            setProjects([p, p2, p3]);
             setLoading(false);
+
         }
         else {
             setError(true);
         }
     };
         fetchProject();
-    }, []);
+    },  [ ,variable]);
 
     const description = "Select a project to get started!";
 
     if (loading) {
-        return (
-            <View style={styles.loadingContainer}>
-                <Text style={styles.title}>Loading...</Text>
-            </View>
-        )
+            return (
+                <View style={styles.loadingContainer}>
+                    <Text style={styles.title}>Loading...</Text>
+                    <Text style={styles.subtitle}>self care projects to help you Touch Grass and reconnect with nature!</Text>
+                </View>
+            )
     }
     else if (error) {
         return (
@@ -90,9 +97,11 @@ export default function TouchGrass({navigation}) {
     else {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Go Green</Text>
+            <Text style={styles.title}>Touch Grass</Text>
             <Text style={styles.subtitle}>{description}</Text>
-            <View>
+            <ScrollView>
+                {projects.map((project) => {
+                    return(
                         <Pressable style={styles.projectContainer} 
                             onPress ={() => navigation.navigate("Project Page", 
                                 {title: project.title, 
@@ -100,7 +109,15 @@ export default function TouchGrass({navigation}) {
                                 pageName: "touchGrass"})}>
                             <Project title={project.title} description={project.description} />
                         </Pressable>
-            </View>
+                );})}
+            </ScrollView>
+            <Pressable style={styles.resetProjects} onPress={() => {
+                setProjects([]);
+                setLoading(true);
+                setVariable(!variable);
+            }}>
+                <Text style={styles.resetProjectsText}>Reset Projects</Text>
+            </Pressable>
         </View>
     );
     }
@@ -117,8 +134,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         color: '#427aa1',
-        paddingBottom: 20,
-        paddingTop: 50,
+        paddingBottom: 10,
+        paddingTop: 30,
     },
     subtitle: {
         fontSize: 16,
@@ -134,6 +151,20 @@ const styles = StyleSheet.create({
     },
     loadingContainer:{
         flex: 1,
-        margin: 20,
+        backgroundColor: '#ebf2fa',
+        marginLeft:50,
+        marginRight:50,
+    },
+    resetProjects: {
+        marginBottom: 10,
+        backgroundColor: '#427aa1',
+        padding: 10,
+        borderRadius: 10,
+        margin: 10,
+    },
+    resetProjectsText: {
+        color: '#ebf2fa',
+        fontSize: 16,
+        fontWeight: 'bold',
     }
 });

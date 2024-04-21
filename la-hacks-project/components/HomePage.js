@@ -7,7 +7,7 @@ export default function HomePage({navigation}) {
   return(
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={{fontWeight: 'bold', fontSize: 20}}>BeGreen</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 20}}>EnviroPal</Text>
       </View>
       <ImageViewer source={require('../assets/home_icon.png')} />
       <View style={styles.buttonContainer}>

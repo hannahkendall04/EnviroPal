@@ -1,9 +1,10 @@
-import {StyleSheet, Text, View, Pressable} from 'react-native';
+import {StyleSheet, Text, View, Pressable, ScrollView} from 'react-native';
 import Project from './Project.js';
 import React, {useState, useEffect} from 'react';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
-const API_KEY = 'AIzaSyCHKmY0gedI_RMoL4Si90iPosuDWc4BuXU';
+// const API_KEY = 'AIzaSyCHKmY0gedI_RMoL4Si90iPosuDWc4BuXU';
+const API_KEY = 'AIzaSyDrl-C4F0U_goNGQY9wPQObXKFLyPkUd70';
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 async function getProjectTitle() {
@@ -55,21 +56,25 @@ export default function GoGreen({navigation}) {
     
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [project, setProject] = useState(null);
+    const [variable, setVariable] = useState(false);
+    const [projects, setProjects] = useState([]);
 
     useEffect(() => {
         const fetchProject = async () => {
-        const project = await createProject();
-        if (project) {
-            setProject(project);
+        const p = await createProject();
+        const p2 = await createProject();
+        const p3 = await createProject();
+        if (p && p2 && p3) {
+            setProjects([p, p2, p3]);
             setLoading(false);
+
         }
         else {
             setError(true);
         }
     };
         fetchProject();
-    }, []);
+    },  [ ,variable]);
 
     const description = "Select a project to get started!";
 
@@ -77,6 +82,7 @@ export default function GoGreen({navigation}) {
         return (
             <View style={styles.loadingContainer}>
                 <Text style={styles.title}>Loading...</Text>
+                <Text style={styles.subtitle}>projects to help you Go Green and give back to the wonderful world around you!</Text>
             </View>
         )
     }
@@ -92,15 +98,25 @@ export default function GoGreen({navigation}) {
         <View style={styles.container}>
             <Text style={styles.title}>Go Green</Text>
             <Text style={styles.subtitle}>{description}</Text>
-            <View>
+            <ScrollView>
+                {projects.map((project) => {
+                    return(
                         <Pressable style={styles.projectContainer} 
                             onPress ={() => navigation.navigate("Project Page", 
                                 {title: project.title, 
                                 description: project.description,
-                                pageName: "goGreen"})}>
+                                pageName: "touchGrass"})}>
                             <Project title={project.title} description={project.description} />
                         </Pressable>
-            </View>
+                );})}
+            </ScrollView>
+            <Pressable style={styles.resetProjects} onPress={() => {
+                setProjects([]);
+                setLoading(true);
+                setVariable(!variable);
+            }}>
+                <Text style={styles.resetProjectsText}>Reset Projects</Text>
+            </Pressable>
         </View>
     );
     }
@@ -117,8 +133,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         color: '#679436',
-        paddingBottom: 20,
-        paddingTop: 50,
+        paddingBottom: 10,
+        paddingTop: 30,
     },
     subtitle: {
         fontSize: 16,
@@ -134,6 +150,20 @@ const styles = StyleSheet.create({
     },
     loadingContainer:{
         flex: 1,
-        margin: 20,
+        backgroundColor: '#ecfaeb',
+        marginLeft:50,
+        marginRight:50,
+    },
+    resetProjects: {
+        marginBottom: 10,
+        backgroundColor: '#679436',
+        padding: 10,
+        borderRadius: 10,
+        margin: 10,
+    },
+    resetProjectsText: {
+        color: '#ecfaeb',
+        fontSize: 16,
+        fontWeight: 'bold',
     }
 });
