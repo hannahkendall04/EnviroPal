@@ -11,7 +11,7 @@ export default function HomePage({navigation}) {
       </View>
       <ImageViewer source={require('../assets/home_icon.png')} />
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.button} onPress = {() => navigation.navigate("Project Home")}>
+        <Pressable style={styles.button} onPress = {() => navigation.navigate("Home")}>
           <Text style={styles.buttonLabel}>Get Started!</Text>
         </Pressable>
       </View>

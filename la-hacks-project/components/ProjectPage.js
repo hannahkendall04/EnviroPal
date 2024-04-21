@@ -96,7 +96,7 @@ export default function ProjectPage({route, navigation}) {
     else {
     return (
         <View style={styles.container}>
-            <Modal visible={modalVisible} animationType='slide'>
+            <Modal visible={modalVisible} animationType='slide' presentationStyle='fullScreen'>
                 <Text style={styles.alert}>Congrats on finishing your task!</Text>
                 <View>
                     <Image source={require('../assets/task_plant.jpg')} style={styles.image} />
@@ -158,16 +158,14 @@ const goGreen = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         color: '#679436',
-        marginLeft: 100,
-        marginRight: 100,
+        marginLeft: 20,
         marginTop: 20,
         marginBottom: 5,
     },
     finalSubtitle: {
         fontSize: 16,
         color: '#679436',
-        marginLeft: 50,
-        marginRight: 50,
+        marginLeft: 20,
     },
     loadingText: {
         fontWeight: 'bold',
@@ -176,6 +174,7 @@ const goGreen = StyleSheet.create({
         paddingBottom: 20,
         paddingTop: 50,
         paddingLeft: 20,
+        paddingRight: 20,
     },
     title: {
         fontWeight: 'bold',
@@ -236,7 +235,7 @@ const goGreen = StyleSheet.create({
         fontWeight: 'bold',
         color: '#679436',
         padding: 10,
-        paddingTop: 30,
+        paddingTop: 75,
         marginLeft: 40,
     },
     image: {
@@ -290,16 +289,15 @@ const touchGrass = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         color: '#427aa1',
-        marginLeft: 100,
-        marginRight: 100,
+        marginLeft: 20,
         marginTop: 20,
         marginBottom: 5,
     },
     finalSubtitle: {
         fontSize: 16,
         color: '#427aa1',
-        marginLeft: 50,
-        marginRight: 50,
+        marginLeft: 20,
+        marginRight: 20,
     },
     taskContainer: {
         backgroundColor: '#ebf2fa',
@@ -348,6 +346,7 @@ const touchGrass = StyleSheet.create({
         color: '#427aa1',
         padding: 10,
         marginLeft: 40,
+        paddingTop: 75,
     },
     image: {
         marginLeft: 20,

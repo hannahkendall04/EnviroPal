@@ -33,7 +33,7 @@ export default function App() {
         return '#679436';
     }
   } 
-  
+
   const GoGreenTab = () => {
     return (
       <Tab.Navigator screenOptions={{headerShown: false, 
@@ -42,10 +42,12 @@ export default function App() {
         tabBarActiveTintColor: '#ebf2fa',
         tabBarLabelStyle: {fontSize: 20, fontWeight: 'bold'}}}>
         <Tab.Screen name="Touch Grass" component={TouchGrass} 
-          options={{tabBarActiveBackgroundColor: '#427aa1',
+          options={{tabBarStyle: {backgroundColor: '#427aa1'},
+          tabBarActiveBackgroundColor: '#427aa1',
           tabBarInactiveBackgroundColor: '#427aa1'}}/>
         <Tab.Screen name="Go Green" component={GoGreen}
-          options={{tabBarActiveBackgroundColor: '#679436',
+          options={{tabBarStyle: {backgroundColor: '#679436'},
+          tabBarActiveBackgroundColor: '#679436',
           tabBarInactiveBackgroundColor: '#679436'}}/>
       </Tab.Navigator>
     );
@@ -55,9 +57,9 @@ export default function App() {
     <View style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home Page" component={HomePage} 
+          <Stack.Screen name="Start" component={HomePage} 
             options={{headerShown: false}} />
-          <Stack.Screen name="Project Home" component={GoGreenTab}
+          <Stack.Screen name="Home" component={GoGreenTab}
             options={({route}) => ({
               headerStyle: {
                 backgroundColor: getBackgroundColor(route),
