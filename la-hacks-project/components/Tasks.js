@@ -1,10 +1,10 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text} from 'react-native';
 
-export default function Tasks({tasks}) {
+export default function Tasks({tasks, conatiner, final}) {
     if (tasks.length === 0) {
         return (
             <View>
-                <Text style={styles.title}>No tasks available</Text>
+                <Text style={styles.final}>No tasks available</Text>
             </View>
         )
     }
