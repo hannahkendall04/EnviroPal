@@ -13,8 +13,4 @@ EnviroPal was a project for LA Hacks 2024, whcih was also my first Hacakthon. I 
     "API_KEY": "<YOUR_API_KEY>"
 }
 ```
-### To Run
-From home directory:
-- npx create-expo-app
-- cd <your-app-name>
-- npx expo start
+
