@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet} from 'react-native';
 
-export default function Project({title, description, id, navigation}) {
+export default function Project({title, description}) {
 
     return (
         <View>

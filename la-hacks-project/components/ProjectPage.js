@@ -1,9 +1,9 @@
 import {View, Text, StyleSheet, Pressable, Modal, Image, ScrollView} from 'react-native';
 import React, {useState, useEffect} from 'react';
+import config from '../config/MediaKeySession.json';
 
 const {GoogleGenerativeAI} = require('@google/generative-ai');
-// const API_KEY = 'AIzaSyCHKmY0gedI_RMoL4Si90iPosuDWc4BuXU';
-const API_KEY = 'AIzaSyDrl-C4F0U_goNGQY9wPQObXKFLyPkUd70';
+const API_KEY = config.API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 async function getProjectLongDescription({title, description}) {

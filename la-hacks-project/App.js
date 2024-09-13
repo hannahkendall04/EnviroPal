@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer, NavigationRouteContext, getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { StyleSheet, Pressable, Text, View } from 'react-native';
+import { NavigationContainer, getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -8,13 +8,13 @@ import HomePage from './components/HomePage.js';
 import TouchGrass from './components/TouchGrass.js';
 import ProjectPage from './components/ProjectPage.js';
 import GoGreen from './components/GoGreen.js';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry.js';
+import Profile from './components/Profile.js';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-
+  
   const getBackgroundColor = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Touch Grass';
     switch (routeName) {
@@ -59,11 +59,17 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="Start" component={HomePage} 
             options={{headerShown: false}} />
+            <Stack.Screen name="Profile" component={Profile} options={
+            {headerStyle: {backgroundColor: '#427aa1'}, headerTintColor: '#fff'}}/>
           <Stack.Screen name="Home" component={GoGreenTab}
-            options={({route}) => ({
+            options={({route, navigation}) => ({
               headerStyle: {
                 backgroundColor: getBackgroundColor(route),
-              }, headerTintColor: '#fff'})} />
+              }, headerTintColor: '#fff', headerRight: () => (
+                <Pressable onPress={() => {navigation.navigate("Profile")}}>
+                  <Text style={{color: '#fff', marginRight: 25, fontSize: 16, fontWeight: 'bold'}}>Profile</Text>
+                </Pressable>
+              )})}/>
           <Stack.Screen name="Project Page" component={ProjectPage} options={({route}) => ({
               headerStyle: {
                 backgroundColor: setBackColor(route.params.pageName),
