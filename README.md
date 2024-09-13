@@ -9,9 +9,8 @@ EnviroPal was a project for LA Hacks 2024, whcih was also my first Hacakthon. I 
 - Have Node installed
 - Have a Gemini API Key stored in config/keys.json file:
 ```json
-# config/keys.json
 {
-    "API_KEY": <YOUR_API_KEY>
+    "API_KEY": "<YOUR_API_KEY>"
 }
 ```
 ### To Run
